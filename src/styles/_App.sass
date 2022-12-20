@@ -10,22 +10,14 @@ $font-size: 5em
 
 span, input, .elementify
     position: relative // top animation
-    opacity: 0 // Hide elements
-    visibility: hidden // Hide cursor
-    animation: appear 1000ms
-    /*
-     * opacity: 1
-     * visibility: visible
-     */
-    animation-fill-mode: forwards
 
 span
     font-size: $font-size
 
 input
     background-color: colors.$black // Blend with background
-    border: none // Remove default
-    outline: none // Remove highlight
+    border: none // Remove default border
+    outline: none // Remove default highlight when focus
     border-bottom: 1px solid white
     text-align: center
     font-size: $font-size
