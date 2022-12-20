@@ -4,9 +4,8 @@ const APPEAR_ANIMATION_DURATION = 1000
 const APPEAR_ANIMATION_DELAY = 750
 
 const ERROR_ANIMATION_DURATION = 20
-const ERROR_ANIMATION_COUNT = 10
+const ERROR_ANIMATION_COUNT = 15
 const ERROR_COLOR = '#e81b00' // If change, change in _color.sass
-const FADE_ANIMATION_DURATION = 250
 
 const ELEM_NUM = 3
 
@@ -63,7 +62,8 @@ async function handleClick(e: React.MouseEvent, inputRef: React.RefObject<HTMLIn
         let style: React.CSSProperties = {
             animationName: 'shake',
             animationDuration: `${ERROR_ANIMATION_DURATION}ms`,
-            animationIterationCount: ERROR_ANIMATION_COUNT
+            animationIterationCount: ERROR_ANIMATION_COUNT,
+            pointerEvents: 'none'
         }
         styles[0] = { ...style, color: ERROR_COLOR }
         styles[1] = { ...style, borderBottomColor: ERROR_COLOR }
@@ -72,14 +72,6 @@ async function handleClick(e: React.MouseEvent, inputRef: React.RefObject<HTMLIn
 
         // Add fade animation
         await new Promise(res => setTimeout(res, ERROR_ANIMATION_DURATION * ERROR_ANIMATION_COUNT))
-        style = { animationDuration: `${FADE_ANIMATION_DURATION}ms` }
-        styles[0] = { ...style, animationName: 'fade-text-color' }
-        styles[1] = { ...style, animationName: 'fade-border-color' }
-        styles[2] = { ...style, animationName: 'fade-bg-color' }
-        setStyles([...styles])
-
-        // Reset inline CSS
-        await new Promise(res => setTimeout(res, FADE_ANIMATION_DURATION))
         setStyles(new Array(ELEM_NUM).fill(undefined))
     }
 }
