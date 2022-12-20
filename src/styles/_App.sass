@@ -68,4 +68,30 @@ input
     100%
         transform: translate(1px, -2px) rotate(-1deg)
         
-            
+/*
+ * Fade error color to white for text
+ */
+@keyframes fade-text-color
+    from
+        color: colors.$error-color
+    to
+        color: white
+
+/*
+ * Fade error color to white for border
+ * (Input bottom color)
+ */
+@keyframes fade-border-color
+    from
+        border-bottom-color: colors.$error-color
+    to
+        border-bottom-color: white
+
+/*
+ * Fade error color to blue for background color
+ */
+@keyframes fade-bg-color
+    from
+        background-color: colors.$error-color
+    to
+        background-color: colors.$elementify-button-color

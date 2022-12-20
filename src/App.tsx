@@ -1,9 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
 
-const ANIMATION_DURATION = 1000
-const ANIMATION_DELAY = 750
+const APPEAR_ANIMATION_DURATION = 1000
+const APPEAR_ANIMATION_DELAY = 750
+
+const ERROR_ANIMATION_DURATION = 20
+const ERROR_ANIMATION_COUNT = 10
+const ERROR_COLOR = '#e81b00' // If change, change in _color.sass
+const FADE_ANIMATION_DURATION = 250
+
 const ELEM_NUM = 3
-const ERROR_COLOR = '#e81b00'
 
 function App() {
     const [styles, setStyles] = useState(initStyles())
@@ -11,9 +16,9 @@ function App() {
 
     useEffect(() => {
         setTimeout(() => {
-            setStyles(new Array(ELEM_NUM).fill({ opacity: 1 }))
+            setStyles(new Array(ELEM_NUM).fill(undefined))
             inputRef.current?.focus()
-        }, ANIMATION_DURATION + ANIMATION_DELAY * ELEM_NUM)
+        }, APPEAR_ANIMATION_DURATION + APPEAR_ANIMATION_DELAY * ELEM_NUM)
     }, [])
 
     return (
@@ -36,34 +41,46 @@ function App() {
 
 function initStyles() {
     const styles: React.CSSProperties[] = []
-    let delay = ANIMATION_DELAY
+    let delay = APPEAR_ANIMATION_DELAY
     for (let i = 0; i < ELEM_NUM; i++) {
         styles.push({
             opacity: 0,
             pointerEvents: 'none',
             animationName: 'appear',
-            animationDuration: `${ANIMATION_DURATION}ms`,
+            animationDuration: `${APPEAR_ANIMATION_DURATION}ms`,
             animationDelay: `${delay}ms`,
             animationFillMode: 'forwards'
         })
-        delay += ANIMATION_DELAY
+        delay += APPEAR_ANIMATION_DELAY
     }
     return styles
 }
 
-function handleClick(e: React.MouseEvent, inputRef: React.RefObject<HTMLInputElement>, setStyles: React.Dispatch<React.SetStateAction<React.CSSProperties[]>>) {
+async function handleClick(e: React.MouseEvent, inputRef: React.RefObject<HTMLInputElement>, setStyles: React.Dispatch<React.SetStateAction<React.CSSProperties[]>>) {
     if (inputRef.current?.value.trim() == '') {
+        // Add shake animation
         const styles: React.CSSProperties[] = []
-        const style: React.CSSProperties = {
+        let style: React.CSSProperties = {
             animationName: 'shake',
-            animationDuration: '20ms',
-            animationIterationCount: 10
+            animationDuration: `${ERROR_ANIMATION_DURATION}ms`,
+            animationIterationCount: ERROR_ANIMATION_COUNT
         }
         styles[0] = { ...style, color: ERROR_COLOR }
-        console.log(styles[0])
         styles[1] = { ...style, borderBottomColor: ERROR_COLOR }
         styles[2] = { ...style, backgroundColor: ERROR_COLOR }
         setStyles(styles)
+
+        // Add fade animation
+        await new Promise(res => setTimeout(res, ERROR_ANIMATION_DURATION * ERROR_ANIMATION_COUNT))
+        style = { animationDuration: `${FADE_ANIMATION_DURATION}ms` }
+        styles[0] = { ...style, animationName: 'fade-text-color' }
+        styles[1] = { ...style, animationName: 'fade-border-color' }
+        styles[2] = { ...style, animationName: 'fade-bg-color' }
+        setStyles([...styles])
+
+        // Reset inline CSS
+        await new Promise(res => setTimeout(res, FADE_ANIMATION_DURATION))
+        setStyles(new Array(ELEM_NUM).fill(undefined))
     }
 }
 
