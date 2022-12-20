@@ -1,0 +1,34 @@
+@use 'App'
+@use 'colors'
+
+* 
+    color: white
+    font-family: sans-serif
+    font-weight: bold
+
+body
+    margin: 0
+    height: 100vh
+    background-color: colors.$black
+    display: flex
+    justify-content: center
+    align-items: center
+
+button
+    border: none
+    cursor: pointer
+
+/*
+ * top: Start below the element's current position
+ * opacity: Create fade-in effect
+ * visibility: Remove cursor (e.g. pointer for buttons) until element appear
+ */
+@keyframes appear
+    from
+        top: 100px
+        opacity: 0
+        visibility: hidden
+    to
+        top: 0
+        opacity: 1
+        visibility: visible
