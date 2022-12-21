@@ -15,7 +15,7 @@ span
     font-size: $font-size
 
 input
-    background-color: colors.$bg-color // Blend with background
+    background-color: transparent // Blend with background
     border: none // Remove default border
     outline: none // Remove default highlight when focus
     border-bottom: 1px solid white
@@ -34,12 +34,20 @@ input
  * top: Start below the element's current position
  * opacity: Create fade-in effect
  */
+$new-top: 100px
 @keyframes appear
     from
-        top: 100px
+        top: $new-top
     to
         top: 0
         opacity: 1
+
+@keyframes disappear
+    from
+        top: 0
+    to
+        top: $new-top
+        opacity: 0
 
 /*
  * Shake screen if user's input is invalid
