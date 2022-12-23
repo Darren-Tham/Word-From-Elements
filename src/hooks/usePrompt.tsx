@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 const APPEAR_ANIMATION_DURATION = 1000
 const APPEAR_ANIMATION_DELAY = 200
@@ -9,7 +9,7 @@ const ERROR_COLOR = '#e81b00'
 
 const ELEM_NUM = 3
 
-export default function usePrompt() {
+export default function usePrompt(setScene: React.Dispatch<React.SetStateAction<string>>) {
     const [styles, setStyles] = useState(initStyles())
     const inputRef = useRef<HTMLInputElement>(null)
 
@@ -31,7 +31,7 @@ export default function usePrompt() {
             <button
                 className='elementify'
                 style={styles[2]}
-                onClick={e => handleClick(e, inputRef, setStyles)}
+                onClick={e => handleClick(e, inputRef, setStyles, setScene)}
             >Elementify
             </button>
         </div>
@@ -60,15 +60,20 @@ function resetStyles(setStyles: React.Dispatch<React.SetStateAction<React.CSSPro
     setStyles(new Array(ELEM_NUM).fill(undefined))
 }
 
-async function handleClick(e: React.MouseEvent, inputRef: React.RefObject<HTMLInputElement>, setStyles: React.Dispatch<React.SetStateAction<React.CSSProperties[]>>) {
+async function handleClick(
+    e: React.MouseEvent,
+    inputRef: React.RefObject<HTMLInputElement>,
+    setStyles: React.Dispatch<React.SetStateAction<React.CSSProperties[]>>,
+    setScene: React.Dispatch<React.SetStateAction<string>>)
+{
     const styles: React.CSSProperties[] = []
     if (inputRef.current?.value.trim() == '') {
         // Add shake animation
         const style: React.CSSProperties = {
+            pointerEvents: 'none',
             animationName: 'shake',
             animationDuration: `${ERROR_ANIMATION_DURATION}ms`,
-            animationIterationCount: ERROR_ANIMATION_COUNT,
-            pointerEvents: 'none'
+            animationIterationCount: ERROR_ANIMATION_COUNT
         }
         styles[0] = { ...style, color: ERROR_COLOR }
         styles[1] = { ...style, borderBottomColor: ERROR_COLOR }
@@ -76,9 +81,10 @@ async function handleClick(e: React.MouseEvent, inputRef: React.RefObject<HTMLIn
         setStyles(styles)
 
         // Reset inline CSS
-        await new Promise(res => setTimeout(res, ERROR_ANIMATION_DURATION * ERROR_ANIMATION_COUNT))
+        await timeout(ERROR_ANIMATION_DURATION * ERROR_ANIMATION_COUNT)
         resetStyles(setStyles)
     } else {
+        // Add disappear animation
         let delay = 0
         for (let i = ELEM_NUM - 1; i >= 0; i--) {
             styles[i] = {
@@ -92,5 +98,12 @@ async function handleClick(e: React.MouseEvent, inputRef: React.RefObject<HTMLIn
             delay += APPEAR_ANIMATION_DELAY
         }
         setStyles(styles)
+
+        await timeout(APPEAR_ANIMATION_DURATION + APPEAR_ANIMATION_DELAY * ELEM_NUM - 1)
+        setScene('solution')
     }
+}
+
+function timeout(time: number) {
+    return new Promise(res => setTimeout(res, time))
 }
