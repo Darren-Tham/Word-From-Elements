@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import Scene from '../enum/Scene'
 
 const APPEAR_ANIMATION_DURATION = 1000
 const APPEAR_ANIMATION_DELAY = 200
@@ -9,7 +10,7 @@ const ERROR_COLOR = '#e81b00'
 
 const ELEM_NUM = 3
 
-export default function usePrompt(setScene: React.Dispatch<React.SetStateAction<string>>) {
+export default function usePrompt(setScene: React.Dispatch<React.SetStateAction<Scene>>, userInput: React.MutableRefObject<string>) {
     const [styles, setStyles] = useState(initStyles())
     const inputRef = useRef<HTMLInputElement>(null)
 
@@ -31,7 +32,7 @@ export default function usePrompt(setScene: React.Dispatch<React.SetStateAction<
             <button
                 className='elementify'
                 style={styles[2]}
-                onClick={e => handleClick(e, inputRef, setStyles, setScene)}
+                onClick={e => handleClick(e, inputRef, setStyles, setScene, userInput)}
             >Elementify
             </button>
         </div>
@@ -64,10 +65,12 @@ async function handleClick(
     e: React.MouseEvent,
     inputRef: React.RefObject<HTMLInputElement>,
     setStyles: React.Dispatch<React.SetStateAction<React.CSSProperties[]>>,
-    setScene: React.Dispatch<React.SetStateAction<string>>)
+    setScene: React.Dispatch<React.SetStateAction<Scene>>,
+    userInput: React.MutableRefObject<string>)
 {
+    const input = inputRef.current?.value.trim().replace(/\+s/g, ' ').toLowerCase()
     const styles: React.CSSProperties[] = []
-    if (inputRef.current?.value.trim() == '') {
+    if (input === '') {
         // Add shake animation
         const style: React.CSSProperties = {
             pointerEvents: 'none',
@@ -84,6 +87,8 @@ async function handleClick(
         await timeout(ERROR_ANIMATION_DURATION * ERROR_ANIMATION_COUNT)
         resetStyles(setStyles)
     } else {
+        if (input !== undefined) userInput.current = input
+
         // Add disappear animation
         let delay = 0
         for (let i = ELEM_NUM - 1; i >= 0; i--) {
@@ -100,7 +105,7 @@ async function handleClick(
         setStyles(styles)
 
         await timeout(APPEAR_ANIMATION_DURATION + APPEAR_ANIMATION_DELAY * ELEM_NUM - 1)
-        setScene('solution')
+        setScene(Scene.SOLUTION)
     }
 }
 
