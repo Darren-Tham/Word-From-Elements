@@ -1,3 +1,5 @@
+@use 'colors'
+
 .solution
     display: flex
     flex-direction: column
@@ -36,3 +38,11 @@
 
 .name, .group
     font-size: 18px
+
+.solution > button
+    background-color: colors.$elementify-button-color
+    font-size: 5em
+    padding: 30px
+    border-radius: 30px
+    &:hover
+        background-color: colors.$elementify-hover-color
