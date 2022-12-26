@@ -10,9 +10,9 @@ export default function App() {
     const solution = useSolution(userInput)
 
     switch (scene) {
-        case 'prompt':
+        case Scene.PROMPT:
             return prompt
-        case 'solution':
+        case Scene.SOLUTION:
             return solution
     }
 }

@@ -8,10 +8,30 @@ interface Element {
 }
 
 export default function useSolution(userInput: React.MutableRefObject<string>) {
-    elementify(userInput.current)
+    const solutions = elementify(userInput.current)
+    const text = solutions.length === 0 ? "No Solution" : `${solutions.length} ${solutions.length == 1 ?  "Solution" : "Solutions"}`
     return (
         <div className='solution'>
-            <span></span>
+            <span className='solution-text'>{text}</span>
+            {solutions.map((elements, key) => (
+                <div
+                    key={key}
+                    className='scroll'
+                >
+                    {elements.map(({ atomicNumber, symbol, name, group }, key) => (
+                        <div
+                            key={key}
+                            className='element'
+                        >
+                            <span className='atomic-number'>{atomicNumber}</span>
+                            <span className='symbol'>{symbol}</span>
+                            <span className='name'>{name}</span>
+                            <span className='group'>{group}</span>
+                        </div>
+                    ))}
+                </div>
+            ))}
+            <button>Reset</button>
         </div>
     )
 }
@@ -28,5 +48,5 @@ function elementify(word: string) {
             table[i + symbol.length].push(...table[i].map(subArr => [ ...subArr, element ]))
         }
     }
-    console.log(table[n])
+    return table[n]
 }

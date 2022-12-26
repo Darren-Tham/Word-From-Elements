@@ -1,2 +1,38 @@
 .solution
-    
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: 50px
+
+.solution-text
+    font-size: 5em
+
+.scroll
+    max-width: 80vw
+    display: flex
+    overflow-x: scroll
+    border: 1px solid white
+    padding: 8px
+    & > .element:nth-child(n + 2) // Spacing between elements
+        margin-left: 8px
+
+
+.element
+    width: 210px
+    height: 250px
+    background: linear-gradient(to right bottom, #c4ddff , #9ec7ff 80%)
+    display: grid
+    grid-template-rows: 20% 45% 1fr 1fr
+    place-items: center
+    padding: 4px 0
+    border: 3px solid #8abbff
+    flex-shrink: 0 // Does not shrink element's width
+
+.atomic-number
+    font-size: 25px
+
+.symbol
+    font-size: 90px
+
+.name, .group
+    font-size: 18px

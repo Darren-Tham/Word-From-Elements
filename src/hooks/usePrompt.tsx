@@ -23,7 +23,10 @@ export default function usePrompt(setScene: React.Dispatch<React.SetStateAction<
 
     return (
         <div className='prompt'>
-            <span style={styles[0]}>Type a Word</span>
+            <span
+                className='prompt-text'
+                style={styles[0]}
+            >Type a Word</span>
             <input
                 type='text'
                 style={styles[1]}
@@ -32,7 +35,7 @@ export default function usePrompt(setScene: React.Dispatch<React.SetStateAction<
             <button
                 className='elementify'
                 style={styles[2]}
-                onClick={e => handleClick(e, inputRef, setStyles, setScene, userInput)}
+                onClick={() => handleClick(inputRef, setStyles, setScene, userInput)}
             >Elementify
             </button>
         </div>
@@ -62,7 +65,6 @@ function resetStyles(setStyles: React.Dispatch<React.SetStateAction<React.CSSPro
 }
 
 async function handleClick(
-    e: React.MouseEvent,
     inputRef: React.RefObject<HTMLInputElement>,
     setStyles: React.Dispatch<React.SetStateAction<React.CSSProperties[]>>,
     setScene: React.Dispatch<React.SetStateAction<Scene>>,
