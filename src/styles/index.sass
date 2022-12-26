@@ -6,6 +6,7 @@
     color: white
     font-family: sans-serif
     font-weight: bold
+    position: relative // top animation
 
 body
     margin: 0
@@ -20,3 +21,9 @@ button
     border: none
     cursor: pointer
     user-select: none
+    background-color: colors.$elementify-button-color
+    font-size: 5em
+    padding: 30px
+    border-radius: 30px
+    &:hover
+        background-color: colors.$elementify-hover-color

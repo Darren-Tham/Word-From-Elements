@@ -15,8 +15,7 @@
     overflow-x: scroll
     border: 1px solid white
     padding: 8px
-    & > .element:nth-child(n + 2) // Spacing between elements
-        margin-left: 8px
+    gap: 8px
 
 
 .element
@@ -38,11 +37,3 @@
 
 .name, .group
     font-size: 18px
-
-.solution > button
-    background-color: colors.$elementify-button-color
-    font-size: 5em
-    padding: 30px
-    border-radius: 30px
-    &:hover
-        background-color: colors.$elementify-hover-color

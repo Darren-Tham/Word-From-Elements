@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
+import { APPEAR_ANIMATION_DURATION, appearStyle, disappearStyle, resetStyles } from '../styles/AnimationStyle'
 import Scene from '../enum/Scene'
 
-const APPEAR_ANIMATION_DURATION = 1000
 const APPEAR_ANIMATION_DELAY = 200
 
 const ERROR_ANIMATION_DURATION = 20
@@ -16,7 +16,7 @@ export default function usePrompt(setScene: React.Dispatch<React.SetStateAction<
 
     useEffect(() => {
         setTimeout(() => {
-            resetStyles(setStyles)
+            resetStyles(setStyles, ELEM_NUM)
             inputRef.current?.focus()
         }, APPEAR_ANIMATION_DURATION + APPEAR_ANIMATION_DELAY * ELEM_NUM)
     }, [])
@@ -39,24 +39,10 @@ export default function usePrompt(setScene: React.Dispatch<React.SetStateAction<
 
 function initStyles() {
     const styles: React.CSSProperties[] = []
-    let delay = APPEAR_ANIMATION_DELAY
     for (let i = 0; i < ELEM_NUM; i++) {
-        styles.push({
-            opacity: 0,
-            pointerEvents: 'none',
-            animationName: 'appear',
-            animationDuration: `${APPEAR_ANIMATION_DURATION}ms`,
-            animationDelay: `${delay}ms`,
-            animationTimingFunction: 'ease',
-            animationFillMode: 'forwards'
-        })
-        delay += APPEAR_ANIMATION_DELAY
+        styles.push(appearStyle(APPEAR_ANIMATION_DELAY * (i + 1)))
     }
     return styles
-}
-
-function resetStyles(setStyles: React.Dispatch<React.SetStateAction<React.CSSProperties[]>>) {
-    setStyles(new Array(ELEM_NUM).fill(undefined))
 }
 
 async function handleClick(
@@ -82,22 +68,12 @@ async function handleClick(
 
         // Reset inline CSS
         await timeout(ERROR_ANIMATION_DURATION * ERROR_ANIMATION_COUNT)
-        resetStyles(setStyles)
+        resetStyles(setStyles, ELEM_NUM)
     } else {
         if (input !== undefined) userInput.current = input
 
-        // Add disappear animation
-        let delay = 0
         for (let i = ELEM_NUM - 1; i >= 0; i--) {
-            styles[i] = {
-                pointerEvents: 'none', 
-                animationName: 'disappear',
-                animationDuration: `${APPEAR_ANIMATION_DURATION}ms`,
-                animationDelay: `${delay}ms`,
-                animationTimingFunction: 'ease-in',
-                animationFillMode: 'forwards'
-            }
-            delay += APPEAR_ANIMATION_DELAY
+            styles[i] = disappearStyle(APPEAR_ANIMATION_DELAY * (ELEM_NUM - 1 - i))
         }
         setStyles(styles)
 
