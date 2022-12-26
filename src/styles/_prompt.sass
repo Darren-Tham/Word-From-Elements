@@ -8,13 +8,13 @@ $font-size: 5em
     align-items: center
     gap: 50px
 
-.prompt-text, input, .elementify
+.prompt > *
     position: relative // top animation
 
-.prompt-text
+.prompt > span
     font-size: $font-size
 
-input
+.prompt > input
     background-color: transparent // Blend with background
     border: none // Remove default border
     outline: none // Remove default highlight when focus
@@ -22,7 +22,7 @@ input
     text-align: center
     font-size: $font-size
 
-.elementify
+.prompt > button
     background-color: colors.$elementify-button-color
     font-size: $font-size
     padding: 30px

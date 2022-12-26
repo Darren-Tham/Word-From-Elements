@@ -23,17 +23,12 @@ export default function usePrompt(setScene: React.Dispatch<React.SetStateAction<
 
     return (
         <div className='prompt'>
-            <span
-                className='prompt-text'
-                style={styles[0]}
-            >Type a Word</span>
+            <span style={styles[0]}>Type a Word</span>
             <input
-                type='text'
                 style={styles[1]}
                 ref={inputRef}
             />
             <button
-                className='elementify'
                 style={styles[2]}
                 onClick={() => handleClick(inputRef, setStyles, setScene, userInput)}
             >Elementify
