@@ -5,7 +5,7 @@ import Scene from '../enum/Scene'
 import data from '../elements.json'
 
 const TEXT_DELAY = 500
-const DELAY_AFTER_TEXT = TEXT_DELAY * 4
+const DELAY_AFTER_TEXT = TEXT_DELAY * 3
 
 interface Element {
     atomicNumber: number
@@ -26,12 +26,12 @@ export default function Solution({ setScene, userInput }: Props) {
     useEffect(() => {
         setTimeout(() => {
             resetStyles(setStyles, solutions.length + 2)
-        }, DELAY_AFTER_TEXT * 2 + APPEAR_ANIMATION_DELAY * solutions.length + APPEAR_ANIMATION_DURATION)
+        }, DELAY_AFTER_TEXT + APPEAR_ANIMATION_DELAY * solutions.length + APPEAR_ANIMATION_DURATION)
     }, [])
 
     const text = solutions.length === 0 ? "No Solution" : `${solutions.length} ${solutions.length === 1 ?  "Solution" : "Solutions"}`
     return (
-        <div className='solution'>
+        <div className='wrapper'>
             <span
                 className='solution-text'
                 style={styles[0]}
@@ -46,33 +46,24 @@ export default function Solution({ setScene, userInput }: Props) {
                     {elements.map(({ atomicNumber, symbol, name, group }, key) => (
                         <div
                             key={key}
-                            className='element'
+                            className={`element ${groupToClassName(group)}`}
                         >
-                            <span className='atomic-number'>{atomicNumber}</span>
-                            <span className='symbol'>{symbol}</span>
-                            <span className='name'>{name}</span>
-                            <span className='group'>{group}</span>
+                            <span>{atomicNumber}</span>
+                            <span>{symbol}</span>
+                            <span>{name}</span>
+                            <span>{group}</span>
                         </div>
                     ))}
                 </div>
             ))}
             <button
+                className='solution-button'
                 style={styles[styles.length - 1]}
                 onClick={() => handleClick(setStyles, setScene, solutions.length)}
             >Reset
             </button>
         </div>
     )
-}
-
-function initStyles(solutionsLen: number) {
-    const styles: React.CSSProperties[] = []
-    styles.push(appearStyle(TEXT_DELAY))
-    for (let i = 0; i < solutionsLen; i++) {
-        styles.push(appearStyle(DELAY_AFTER_TEXT + APPEAR_ANIMATION_DELAY * i))
-    }
-    styles.push(appearStyle(DELAY_AFTER_TEXT * 2 + APPEAR_ANIMATION_DELAY * solutionsLen))
-    return styles
 }
 
 function elementify(word: string) {
@@ -90,6 +81,15 @@ function elementify(word: string) {
     return table[n]
 }
 
+function initStyles(solutionsLen: number) {
+    const styles: React.CSSProperties[] = []
+    styles.push(appearStyle(TEXT_DELAY))
+    for (let i = 0; i < solutionsLen + 1; i++) {
+        styles.push(appearStyle(DELAY_AFTER_TEXT + APPEAR_ANIMATION_DELAY * i))
+    }
+    return styles
+}
+
 async function handleClick(
     setStyles: React.Dispatch<React.SetStateAction<React.CSSProperties[]>>,
     setScene: React.Dispatch<React.SetStateAction<Scene>>,
@@ -104,4 +104,8 @@ async function handleClick(
 
     await timeout(APPEAR_ANIMATION_DURATION + APPEAR_ANIMATION_DELAY * (solutionLen + 1))
     setScene(Scene.PROMPT)
+}
+
+function groupToClassName(group: string) {
+    return group.replace(/\s/g, '-').toLowerCase()
 }

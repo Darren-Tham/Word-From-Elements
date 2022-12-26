@@ -1,13 +1,11 @@
 @use 'colors'
-
-.solution
-    display: flex
-    flex-direction: column
-    align-items: center
-    gap: 50px
+@use 'var'
 
 .solution-text
-    font-size: 5em
+    margin-top: var.$gap
+
+.solution-button
+    margin-bottom: var.$gap
 
 .scroll
     max-width: 80vw
@@ -17,23 +15,51 @@
     padding: 8px
     gap: 8px
 
-
 .element
     width: 210px
     height: 250px
-    background: linear-gradient(to right bottom, #c4ddff , #9ec7ff 80%)
     display: grid
     grid-template-rows: 20% 45% 1fr 1fr
     place-items: center
     padding: 4px 0
-    border: 3px solid #8abbff
     flex-shrink: 0 // Does not shrink element's width
+    & > span:first-child // Atomic Number
+       font-size: 25px 
+    & > span:nth-child(2) // Symbol
+        font-size: 90px
+    & > span:nth-child(n + 3) // Name and Group
+        font-size: 18px
 
-.atomic-number
-    font-size: 25px
+@mixin gradient($light, $dark, $border)
+    background: linear-gradient(to right bottom, $light, $dark 80%)
+    border: 3px solid $border
 
-.symbol
-    font-size: 90px
+.alkali-metal
+    @include gradient(colors.$alkali-metal-light-color, colors.$alkali-metal-dark-color, colors.$alkali-metal-border-color)
 
-.name, .group
-    font-size: 18px
+.alkaline-earth-metal
+    @include gradient(colors.$alkaline-earth-metal-light-color, colors.$alkaline-earth-metal-dark-color, colors.$alkaline-earth-metal-border-color)
+
+.transition-metal
+    @include gradient(colors.$transition-metal-light-color, colors.$transition-metal-dark-color, colors.$transition-metal-border-color) 
+
+.post-transition-metal
+    @include gradient(colors.$post-transition-metal-light-color, colors.$post-transition-metal-dark-color, colors.$post-transition-metal-border-color) 
+
+.metalloid
+    @include gradient(colors.$metalloid-light-color, colors.$metalloid-dark-color, colors.$metalloid-border-color)
+
+.lanthanide
+    @include gradient(colors.$lanthanide-light-color, colors.$lanthanide-dark-color, colors.$lanthanide-border-color)
+
+.actinide
+    @include gradient(colors.$actinide-light-color, colors.$actinide-dark-color, colors.$actinide-border-color)
+
+.nonmetal
+    @include gradient(colors.$nonmetal-light-color, colors.$nonmetal-dark-color, colors.$nonmetal-border-color)
+
+.halogen
+    @include gradient(colors.$halogen-light-color, colors.$halogen-dark-color, colors.$halogen-border-color)
+
+.noble-gas
+    @include gradient(colors.$noble-gas-light-color, colors.$noble-gas-dark-color, colors.$noble-gas-border-color)

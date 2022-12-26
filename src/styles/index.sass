@@ -1,4 +1,5 @@
 @use 'colors'
+@use 'var'
 @use 'prompt'
 @use 'solution'
 
@@ -22,8 +23,16 @@ button
     cursor: pointer
     user-select: none
     background-color: colors.$elementify-button-color
-    font-size: 5em
+    font-size: var.$font-size
     padding: 30px
     border-radius: 30px
     &:hover
         background-color: colors.$elementify-hover-color
+    
+.wrapper
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: var.$gap
+    & > span
+        font-size: var.$font-size

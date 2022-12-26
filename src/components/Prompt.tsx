@@ -27,8 +27,9 @@ export default function Prompt({ setScene, userInput }: Props) {
     }, [])
 
     return (
-        <div className='prompt'>
-            <span style={styles[0]}>Type a Word</span>
+        <div className='wrapper'>
+            <span style={styles[0]}>Type a Word
+            </span>
             <input
                 style={styles[1]}
                 ref={inputRef}
