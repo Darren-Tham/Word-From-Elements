@@ -1,6 +1,10 @@
-import { useState } from 'react'
-import { appearStyle, disappearStyle, resetStyles } from '../styles/AnimationStyle'
+import { useState, useEffect } from 'react'
+import { APPEAR_ANIMATION_DURATION, appearStyle, disappearStyle, resetStyles } from '../styles/AnimationStyle'
 import data from '../elements.json'
+
+const TEXT_DELAY = 500
+const DELAY_AFTER_TEXT = TEXT_DELAY * 4
+const APPEAR_ANIMATION_DELAY = 200
 
 interface Element {
     atomicNumber: number
@@ -9,17 +13,18 @@ interface Element {
     group: string
 }
 
-const INITIAL_APPEAR_ANIMATION_DELAY = 500
-const APPEAR_ANIMATION_DELAY = 200
+interface Props {
+    userInput: React.MutableRefObject<string>
+}
 
-export default function useSolution(userInput: React.MutableRefObject<string>) {
+export default function Solution({ userInput }: Props) {
     const solutions = elementify(userInput.current)
     const [styles, setStyles] = useState(initStyles(solutions.length))
 
     useEffect(() => {
         setTimeout(() => {
             resetStyles(setStyles, solutions.length + 2)
-        }, INITIAL_APPEAR_ANIMATION_DELAY * 2 + APPEAR_ANIMATION_DELAY * (solutions.length + 1))
+        }, DELAY_AFTER_TEXT * 2 + APPEAR_ANIMATION_DELAY * solutions.length + APPEAR_ANIMATION_DURATION)
     }, [])
 
     const text = solutions.length === 0 ? "No Solution" : `${solutions.length} ${solutions.length === 1 ?  "Solution" : "Solutions"}`
@@ -55,10 +60,11 @@ export default function useSolution(userInput: React.MutableRefObject<string>) {
 
 function initStyles(solutionsLen: number) {
     const styles: React.CSSProperties[] = []
-    styles.push(appearStyle(INITIAL_APPEAR_ANIMATION_DELAY))
-    for (let i = 0; i < solutionsLen + 1; i++) {
-        styles.push(appearStyle(INITIAL_APPEAR_ANIMATION_DELAY * 2 + APPEAR_ANIMATION_DELAY * i))
+    styles.push(appearStyle(TEXT_DELAY))
+    for (let i = 0; i < solutionsLen; i++) {
+        styles.push(appearStyle(DELAY_AFTER_TEXT + APPEAR_ANIMATION_DELAY * i))
     }
+    styles.push(appearStyle(DELAY_AFTER_TEXT * 2 + APPEAR_ANIMATION_DELAY * solutionsLen))
     return styles
 }
 

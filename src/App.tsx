@@ -1,18 +1,25 @@
 import { useState, useRef } from 'react'
-import usePrompt from './hooks/usePrompt'
-import useSolution from './hooks/useSolution'
+import Prompt from './components/Prompt'
+import Solution from './components/Solution'
 import Scene from './enum/Scene'
 
 export default function App() {
     const [scene, setScene] = useState(Scene.PROMPT)
     const userInput = useRef('')
-    const prompt = usePrompt(setScene, userInput)
-    const solution = useSolution(userInput)
 
     switch (scene) {
         case Scene.PROMPT:
-            return prompt
+            return (
+                <Prompt
+                    setScene={setScene}
+                    userInput={userInput}
+                />
+            )
         case Scene.SOLUTION:
-            return solution
+            return (
+                <Solution
+                    userInput={userInput}
+                />
+            )
     }
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { APPEAR_ANIMATION_DURATION, appearStyle, disappearStyle, resetStyles } from '../styles/AnimationStyle'
 import Scene from '../enum/Scene'
 
@@ -10,7 +10,12 @@ const ERROR_COLOR = '#ff4033'
 
 const ELEM_NUM = 3
 
-export default function usePrompt(setScene: React.Dispatch<React.SetStateAction<Scene>>, userInput: React.MutableRefObject<string>) {
+interface Props {
+    setScene: React.Dispatch<React.SetStateAction<Scene>>
+    userInput: React.MutableRefObject<string>
+}
+
+export default function Prompt({ setScene, userInput }: Props) {
     const [styles, setStyles] = useState(initStyles())
     const inputRef = useRef<HTMLInputElement>(null)
 
