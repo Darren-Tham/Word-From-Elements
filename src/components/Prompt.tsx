@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { APPEAR_ANIMATION_DURATION, appearStyle, disappearStyle, resetStyles } from '../styles/AnimationStyle'
+import { useState, useEffect, useRef } from 'react'
+import { APPEAR_ANIMATION_DURATION, APPEAR_ANIMATION_DELAY, appearStyle, disappearStyle, resetStyles } from '../styles/AnimationStyle'
+import timeout from '../helper/timeout'
 import Scene from '../enum/Scene'
 
-const APPEAR_ANIMATION_DELAY = 200
 
 const ERROR_ANIMATION_DURATION = 20
 const ERROR_ANIMATION_COUNT = 15
@@ -77,16 +77,12 @@ async function handleClick(
     } else {
         if (input !== undefined) userInput.current = input
 
-        for (let i = ELEM_NUM - 1; i >= 0; i--) {
-            styles[i] = disappearStyle(APPEAR_ANIMATION_DELAY * (ELEM_NUM - 1 - i))
+        for (let i = 0; i < ELEM_NUM; i++) {
+            styles.push(disappearStyle(APPEAR_ANIMATION_DELAY * (ELEM_NUM - 1 - i)))
         }
         setStyles(styles)
 
         await timeout(APPEAR_ANIMATION_DURATION + APPEAR_ANIMATION_DELAY * ELEM_NUM - 1)
         setScene(Scene.SOLUTION)
     }
-}
-
-function timeout(time: number) {
-    return new Promise(res => setTimeout(res, time))
 }

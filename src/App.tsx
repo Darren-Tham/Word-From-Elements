@@ -18,6 +18,7 @@ export default function App() {
         case Scene.SOLUTION:
             return (
                 <Solution
+                    setScene={setScene}
                     userInput={userInput}
                 />
             )

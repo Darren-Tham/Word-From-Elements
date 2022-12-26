@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
-import { APPEAR_ANIMATION_DURATION, appearStyle, disappearStyle, resetStyles } from '../styles/AnimationStyle'
+import React, { useState, useEffect, ReactText } from 'react'
+import { APPEAR_ANIMATION_DURATION, APPEAR_ANIMATION_DELAY, appearStyle, disappearStyle, resetStyles } from '../styles/AnimationStyle'
+import timeout from '../helper/timeout'
+import Scene from '../enum/Scene'
 import data from '../elements.json'
 
 const TEXT_DELAY = 500
 const DELAY_AFTER_TEXT = TEXT_DELAY * 4
-const APPEAR_ANIMATION_DELAY = 200
 
 interface Element {
     atomicNumber: number
@@ -14,10 +15,11 @@ interface Element {
 }
 
 interface Props {
+    setScene: React.Dispatch<React.SetStateAction<Scene>>
     userInput: React.MutableRefObject<string>
 }
 
-export default function Solution({ userInput }: Props) {
+export default function Solution({ setScene, userInput }: Props) {
     const solutions = elementify(userInput.current)
     const [styles, setStyles] = useState(initStyles(solutions.length))
 
@@ -33,7 +35,8 @@ export default function Solution({ userInput }: Props) {
             <span
                 className='solution-text'
                 style={styles[0]}
-            >{text}</span>
+            >{text}
+            </span>
             {solutions.map((elements, key) => (
                 <div
                     key={key}
@@ -53,7 +56,11 @@ export default function Solution({ userInput }: Props) {
                     ))}
                 </div>
             ))}
-            <button style={styles[styles.length - 1]}>Reset</button>
+            <button
+                style={styles[styles.length - 1]}
+                onClick={() => handleClick(setStyles, setScene, solutions.length)}
+            >Reset
+            </button>
         </div>
     )
 }
@@ -81,4 +88,20 @@ function elementify(word: string) {
         }
     }
     return table[n]
+}
+
+async function handleClick(
+    setStyles: React.Dispatch<React.SetStateAction<React.CSSProperties[]>>,
+    setScene: React.Dispatch<React.SetStateAction<Scene>>,
+    solutionLen: number
+)
+{
+    const styles: React.CSSProperties[] = []  
+    for (let i = 0; i < solutionLen + 2; i++) {
+        styles.push(disappearStyle(APPEAR_ANIMATION_DELAY * (solutionLen + 1 - i)))
+    }
+    setStyles(styles)
+
+    await timeout(APPEAR_ANIMATION_DURATION + APPEAR_ANIMATION_DELAY * (solutionLen + 1))
+    setScene(Scene.PROMPT)
 }

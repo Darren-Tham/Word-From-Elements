@@ -1,6 +1,5 @@
-import React from "react"
-
 export const APPEAR_ANIMATION_DURATION = 1000
+export const APPEAR_ANIMATION_DELAY = 200
 
 export function appearStyle(delay: number): React.CSSProperties {
     return {
