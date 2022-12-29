@@ -1,6 +1,9 @@
+/**
+ * Enum to change scene on the screen
+ */
 const enum Scene {
-    PROMPT = 'prompt',
-    SOLUTION = 'solution'
+    PROMPT,
+    SOLUTION
 }
 
 export default Scene
