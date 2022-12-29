@@ -8,9 +8,24 @@ import Solution from './components/Solution'
 // Enum
 import Scene from './enum/Scene'
 
+/**
+ * Root file of the React application
+ * 
+ * @returns React application
+ */
 export default function App() {
+    /**
+     * Changes scene on screen
+     */
     const [scene, setScene] = useState(Scene.PROMPT)
-    const formattedInputRef = useRef('') // Change in Prompt, use in Solution
+
+    /**
+     * Stores formatted user's input
+     * 
+     * Stored in Prompt
+     * Used in Solution
+     */
+    const formattedInputRef = useRef('')
 
     switch (scene) {
         case Scene.PROMPT:

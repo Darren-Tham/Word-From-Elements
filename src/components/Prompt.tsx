@@ -66,7 +66,7 @@ export default function Prompt({
     const inputRef = useRef<HTMLInputElement>(null)
 
     /**
-     * Resets inline CSS appear animation
+     * Clears inline CSS appear animation
      * styles and focus on input element
      */
     useEffect(() => {
@@ -96,7 +96,7 @@ export default function Prompt({
 }
 
 /**
- * Initializes style with inline CSS appear animation styles
+ * Initializes styles with inline CSS appear animation styles
  * 
  * @returns inline CSS appear animation styles array
  */
@@ -190,17 +190,17 @@ async function handleClick(
     try {
         formattedInputRef.current = formatInput(inputRef)
 
-        // Add inline CSS disappear animation
+        // Adds inline CSS disappear animation
         setStyles(getDisappearStyles(ELEM_NUM))
 
-        // Change scene to Solution
+        // Changes scene to Solution
         await timeout(APPEAR_ANIMATION_DURATION + APPEAR_ANIMATION_DELAY * ELEM_NUM - 1)
         setScene(Scene.SOLUTION)
     } catch (_) {
-        // Add inline CSS error animation
+        // Adds inline CSS error animation
         setStyles(getErrorStyles())
 
-        // Reset inline CSS
+        // Resets inline CSS
         await timeout(ERROR_ANIMATION_DURATION * ERROR_ANIMATION_COUNT)
         resetStyles(setStyles, ELEM_NUM)
     }
