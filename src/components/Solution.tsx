@@ -77,9 +77,24 @@ export default function Solution({
      */
     useEffect(() => {
         setTimeout(() => {
+            window.addEventListener('keydown', handleKeyDown)
             resetStyles(setStyles, solutions.length + 2)
         }, ANIMATION_DELAY_AFTER_TEXT + APPEAR_ANIMATION_DELAY * solutions.length + APPEAR_ANIMATION_DURATION)
+
+        return () => window.removeEventListener('keydown', handleKeyDown) // Cleanup function
     }, [])
+
+    /**
+     * Allows user to press the Enter key to return to Prompt scene
+     * 
+     * Adds inline CSS disappear animation styles
+     * then changes scene to Prompt
+     * 
+     * @param evt event that reads user's keyboard input
+     */
+    function handleKeyDown({ key }: KeyboardEvent) {
+       if (key === 'Enter') handleClick(setStyles, setScene, solutions.length, handleKeyDown)
+    }
 
     const text = solutions.length === 0 ? "No Solution" : `${solutions.length} ${solutions.length === 1 ?  "Solution" : "Solutions"}`
     return (
@@ -112,7 +127,7 @@ export default function Solution({
             <button
                 className='solution-button'
                 style={styles[styles.length - 1]}
-                onClick={() => handleClick(setStyles, setScene, solutions.length)}
+                onClick={() => handleClick(setStyles, setScene, solutions.length, handleKeyDown)}
             >Reset</button>
         </div>
     )
@@ -167,6 +182,8 @@ function initStyles(
 }
 
 /**
+ * Allows user to press button to return to Prompt scene
+ * 
  * Adds inline CSS disappear animation styles
  * then changes scene to Prompt
  * 
@@ -177,9 +194,12 @@ function initStyles(
 async function handleClick(
     setStyles: React.Dispatch<React.SetStateAction<React.CSSProperties[]>>,
     setScene: React.Dispatch<React.SetStateAction<Scene>>,
-    solutionLen: number
+    solutionLen: number,
+    handleKeyDown: (evt: KeyboardEvent) => void
 )
 {
+    window.removeEventListener('keydown', handleKeyDown)
+
     // Adds inline CSS disappear animation
     setStyles(getDisappearStyles(solutionLen + 2)) // + 2 is for the text span and reset button
 

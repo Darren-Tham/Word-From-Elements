@@ -86,7 +86,7 @@ export default function Prompt({
             <input
                 style={styles[1]}
                 ref={inputRef}
-                onKeyDown={e => handleKeyDown(e, setStyles, setScene, inputRef, formattedInputRef)}
+                onKeyDown={evt => handleKeyDown(evt, setStyles, setScene, inputRef, formattedInputRef)}
             />
             <button
                 style={styles[2]}
@@ -107,6 +107,21 @@ function initStyles() {
         .map((_, i) => getAppearStyle(APPEAR_ANIMATION_DELAY * (i + 1)))
 }
 
+/**
+ * Allows user to press the Enter key to submit input
+ * 
+ * If user's input is NOT formatted correctly, styles will
+ * update to inline CSS error animation styles
+ * 
+ * Else, styles will update to inline CSS disappear
+ * animation styles then change scene to the Solution screen
+ * 
+ * @param evt - event that reads user's keyboard input
+ * @param setStyles - React state setter to set styles
+ * @param setScene  - React state setter to set scene
+ * @param inputRef  - React ref to get user's input
+ * @param formattedInputRef - React ref to store formatted input
+ */
 function handleKeyDown(
     { key }: React.KeyboardEvent<HTMLInputElement>,
     setStyles: React.Dispatch<React.SetStateAction<React.CSSProperties[]>>,
@@ -119,6 +134,8 @@ function handleKeyDown(
 }
 
 /**
+ * Allows user to press button to submit input
+ * 
  * If user's input is NOT formatted correctly, styles will
  * update to inline CSS error animation styles
  * 
