@@ -147,7 +147,7 @@ function formatInput(
 )
 {
     if (inputRef.current == null) throw 'inputRef is null'
-    const formattedInput = inputRef.current.value.trim().replace(/\+s/g, ' ').toLowerCase()
+    const formattedInput = inputRef.current.value.trim().replace(/\s+/g, ' ').toLowerCase()
     if (formattedInput == '') throw 'Empty string detected'
     if (!isAlpha(formattedInput)) throw 'String should only consist of English letters and spaces'
     return formattedInput
