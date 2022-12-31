@@ -74,6 +74,7 @@ export default function Solution({
 
     /**
      * Clears inline CSS appear animation styles
+     * and add keydown event listener
      */
     useEffect(() => {
         setTimeout(() => {
