@@ -101,10 +101,10 @@ export default function Solution({
                             key={key}
                             className={`element ${groupToClassName(group)}`}
                         >
-                            <span>{atomicNumber}</span>
+                            <span>{atomicNumber === 0 ? '' : atomicNumber}</span>
                             <span>{symbol}</span>
                             <span>{name}</span>
-                            <span>{group}</span>
+                            <span>{group === 'space' ? '' : group}</span>
                         </div>
                     ))}
                 </div>
@@ -118,18 +118,27 @@ export default function Solution({
     )
 }
 
+/**
+ * Returns all possible ways the user's input can be
+ * created using symbols from elements from the
+ * periodic table
+ * 
+ * @param formattedInput - formatted user's input
+ * @returns array containing different solutions (solutions are arrays storing Element objects)
+ */
 function elementify(
-    word: string
+    formattedInput: string
 )
 {
-    const n = word.length
+    const n = formattedInput.length
     const table = new Array<Element[][]>(n + 1).fill([]).map(() => new Array<Element[]>())
     table[0] = [[]]
     for (let i = 0; i <= n; i++) {
+
         if (table[i].length === 0) continue
         for (const element of data) {
-            const { symbol } = element
-            if (word.slice(i, i + symbol.length) !== symbol.toLowerCase()) continue
+            const symbol = element.symbol.toLowerCase()
+            if (formattedInput.slice(i, i + symbol.length) !== symbol) continue
             table[i + symbol.length].push(...table[i].map(subArr => [ ...subArr, element ]))
         }
     }

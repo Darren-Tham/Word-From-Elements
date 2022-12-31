@@ -706,5 +706,11 @@
         "symbol": "Og",
         "name": "Oganesson",
         "group": "Noble Gas"
+    },
+    {
+        "atomicNumber": 0,
+        "symbol": " ",
+        "name": "",
+        "group": "space"
     }
 ]
