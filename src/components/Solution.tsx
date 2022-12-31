@@ -190,6 +190,7 @@ function initStyles(
  * @param setStyles - React state setter to set styles 
  * @param setScene - React state setter to set scene
  * @param solutionLen - number of solutions
+ * @param handleKeyDown - function to be removed from event listener when transitioning to Prompt scene 
  */
 async function handleClick(
     setStyles: React.Dispatch<React.SetStateAction<React.CSSProperties[]>>,

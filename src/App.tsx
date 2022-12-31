@@ -22,8 +22,7 @@ export default function App() {
     /**
      * Stores formatted user's input
      * 
-     * Stored in Prompt
-     * Used in Solution
+     * Stored in Prompt and used in Solution
      */
     const formattedInputRef = useRef('')
 
