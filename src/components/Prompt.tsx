@@ -1,5 +1,5 @@
 // React
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 // Enum
 import Scene from '../enum/Scene'
@@ -86,6 +86,7 @@ export default function Prompt({
             <input
                 style={styles[1]}
                 ref={inputRef}
+                onKeyDown={e => handleKeyDown(e, setStyles, setScene, inputRef, formattedInputRef)}
             />
             <button
                 style={styles[2]}
@@ -106,25 +107,53 @@ function initStyles() {
         .map((_, i) => getAppearStyle(APPEAR_ANIMATION_DELAY * (i + 1)))
 }
 
+function handleKeyDown(
+    { key }: React.KeyboardEvent<HTMLInputElement>,
+    setStyles: React.Dispatch<React.SetStateAction<React.CSSProperties[]>>,
+    setScene: React.Dispatch<React.SetStateAction<Scene>>,
+    inputRef: React.RefObject<HTMLInputElement>,
+    formattedInputRef: React.MutableRefObject<string>
+)
+{
+    if (key === 'Enter') handleClick(setStyles, setScene, inputRef, formattedInputRef)
+}
+
 /**
- * Gets inline CSS error animation styles that
- * creates a shaking effect when user inputs an
- * incorrectly-formatted string
+ * If user's input is NOT formatted correctly, styles will
+ * update to inline CSS error animation styles
  * 
- * @returns inline CSS error animation styles array
+ * Else, styles will update to inline CSS disappear
+ * animation styles then change scene to the Solution screen
+ * 
+ * @param setStyles - React state setter to set styles
+ * @param setScene  - React state setter to set scene
+ * @param inputRef  - React ref to get user's input
+ * @param formattedInputRef - React ref to store formatted input
  */
-function getErrorStyles(): React.CSSProperties[] {
-    const errorStyle: React.CSSProperties = {
-        pointerEvents: 'none',
-        animationName: 'shake',
-        animationDuration: `${ERROR_ANIMATION_DURATION}ms`,
-        animationIterationCount: ERROR_ANIMATION_COUNT,
+async function handleClick(
+    setStyles: React.Dispatch<React.SetStateAction<React.CSSProperties[]>>,
+    setScene: React.Dispatch<React.SetStateAction<Scene>>,
+    inputRef: React.RefObject<HTMLInputElement>,
+    formattedInputRef: React.MutableRefObject<string>
+)
+{
+    try {
+        formattedInputRef.current = formatInput(inputRef)
+
+        // Adds inline CSS disappear animation
+        setStyles(getDisappearStyles(ELEM_NUM))
+
+        // Changes scene to Solution
+        await timeout(APPEAR_ANIMATION_DURATION + APPEAR_ANIMATION_DELAY * ELEM_NUM - 1)
+        setScene(Scene.SOLUTION)
+    } catch (_) {
+        // Adds inline CSS error animation
+        setStyles(getErrorStyles())
+
+        // Resets inline CSS
+        await timeout(ERROR_ANIMATION_DURATION * ERROR_ANIMATION_COUNT)
+        resetStyles(setStyles, ELEM_NUM)
     }
-    return [
-        { ...errorStyle, color: ERROR_COLOR },
-        { ...errorStyle, borderBottomColor: ERROR_COLOR, color: ERROR_COLOR },
-        { ...errorStyle, background: ERROR_COLOR }
-    ]
 }
 
 /**
@@ -169,39 +198,22 @@ function isAlpha(
 }
 
 /**
- * If user's input is NOT formatted correctly, styles will
- * update to inline CSS error animation styles
+ * Gets inline CSS error animation styles that
+ * creates a shaking effect when user inputs an
+ * incorrectly-formatted string
  * 
- * Else, styles will update to inline CSS disappear
- * animation styles then change scene to the Solution screen
- * 
- * @param setStyles - React state setter to set styles
- * @param setScene  - React state setter to set scene
- * @param inputRef  - React ref to get user's input
- * @param formattedInputRef - React ref to store formatted input
+ * @returns inline CSS error animation styles array
  */
-async function handleClick(
-    setStyles: React.Dispatch<React.SetStateAction<React.CSSProperties[]>>,
-    setScene: React.Dispatch<React.SetStateAction<Scene>>,
-    inputRef: React.RefObject<HTMLInputElement>,
-    formattedInputRef: React.MutableRefObject<string>
-)
-{
-    try {
-        formattedInputRef.current = formatInput(inputRef)
-
-        // Adds inline CSS disappear animation
-        setStyles(getDisappearStyles(ELEM_NUM))
-
-        // Changes scene to Solution
-        await timeout(APPEAR_ANIMATION_DURATION + APPEAR_ANIMATION_DELAY * ELEM_NUM - 1)
-        setScene(Scene.SOLUTION)
-    } catch (_) {
-        // Adds inline CSS error animation
-        setStyles(getErrorStyles())
-
-        // Resets inline CSS
-        await timeout(ERROR_ANIMATION_DURATION * ERROR_ANIMATION_COUNT)
-        resetStyles(setStyles, ELEM_NUM)
+function getErrorStyles(): React.CSSProperties[] {
+    const errorStyle: React.CSSProperties = {
+        pointerEvents: 'none',
+        animationName: 'shake',
+        animationDuration: `${ERROR_ANIMATION_DURATION}ms`,
+        animationIterationCount: ERROR_ANIMATION_COUNT,
     }
+    return [
+        { ...errorStyle, color: ERROR_COLOR },
+        { ...errorStyle, borderBottomColor: ERROR_COLOR, color: ERROR_COLOR },
+        { ...errorStyle, background: ERROR_COLOR }
+    ]
 }
