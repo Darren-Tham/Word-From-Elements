@@ -1,11 +1,12 @@
 // React
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 // Enum
 import Scene from '../enum/Scene'
 
 // Helper
 import timeout from '../helper/timeout'
+import foo from '../helper/foo'
 
 // Style
 import { APPEAR_ANIMATION_DURATION, APPEAR_ANIMATION_DELAY, getAppearStyle, getDisappearStyles, resetStyles } from '../styles/AnimationStyle'
@@ -30,16 +31,6 @@ const TEXT_ANIMATION_DELAY = 500
  * the solution
  */
 const ANIMATION_DELAY_AFTER_TEXT = TEXT_ANIMATION_DELAY * 3
-
-/**
- * Elemental properties displayed
- */
-interface Element {
-    atomicNumber: number
-    symbol: string
-    name: string
-    group: string
-}
 
 /**
  * Properties for the Solution component
@@ -73,6 +64,11 @@ export default function Solution({
     const [styles, setStyles] = useState(initStyles(solutions.length))
 
     /**
+     * Stores scroll div elements to add drag feature
+     */
+    const scrollRefs = useRef<(HTMLDivElement | null)[]>([])
+
+    /**
      * Clears inline CSS appear animation styles
      * and add keydown event listener
      */
@@ -82,7 +78,59 @@ export default function Solution({
             resetStyles(setStyles, solutions.length + 2)
         }, ANIMATION_DELAY_AFTER_TEXT + APPEAR_ANIMATION_DELAY * solutions.length + APPEAR_ANIMATION_DURATION)
 
-        return () => window.removeEventListener('keydown', handleKeyDown) // Cleanup function
+        return () => { window.removeEventListener('keydown', handleKeyDown) } // Cleanup function
+    }, [])
+
+    /**
+     * Add event listener to each element row to allow
+     * users to drag and scroll
+     */
+    useEffect(() => {
+        const startEventListeners: ((evt: MouseEvent) => void)[] = []
+        const dragEventListeners: ((evt: MouseEvent) => void)[] = []
+        const stopEventListeners: (() => void)[] = []
+ 
+        let isClicked = false
+        let startX: number
+        let initialScrollLeft: number
+
+        scrollRefs.current.forEach((elem, i) => {
+            if (elem === null) return
+
+            const start = (evt: MouseEvent) => {
+                isClicked = true
+                startX = evt.pageX - elem.offsetLeft
+                initialScrollLeft = elem.scrollLeft
+            }
+
+            const drag = (evt: MouseEvent) => {
+                if (!isClicked) return
+                evt.preventDefault()
+                const x = evt.pageX - elem.offsetLeft
+                const dist = x - startX
+                elem.scrollLeft = initialScrollLeft - dist
+            }
+
+            const stop = () => { isClicked = false }
+
+            startEventListeners[i] = start
+            dragEventListeners[i] = drag
+            stopEventListeners[i] = stop
+
+            elem.addEventListener('mousedown', start)
+            elem.addEventListener('mousemove', drag)
+            elem.addEventListener('mouseup', stop)
+            elem.addEventListener('mouseleave', stop)
+        })
+
+        return () => {
+            scrollRefs.current.forEach((elem, i) => {
+                elem?.removeEventListener('mousedown', startEventListeners[i])
+                elem?.removeEventListener('mousemove', dragEventListeners[i])
+                elem?.removeEventListener('mouseup', stopEventListeners[i])
+                elem?.removeEventListener('mouseleave', stopEventListeners[i])
+            })
+        }
     }, [])
 
     /**
@@ -111,6 +159,7 @@ export default function Solution({
                     key={key}
                     className='scroll'
                     style={styles[key + 1]}
+                    ref={el => scrollRefs.current[key] = el}
                 >
                     {elements.map(({ atomicNumber, symbol, name, group }, key) => (
                         <div
@@ -146,6 +195,16 @@ function elementify(
     formattedInput: string
 )
 {
+    /**
+     * Elemental properties displayed
+     */
+    interface Element {
+        atomicNumber: number
+        symbol: string
+        name: string
+        group: string
+    }
+
     const n = formattedInput.length
     const table = new Array<Element[][]>(n + 1).fill([]).map(() => new Array<Element[]>())
     table[0] = [[]]
