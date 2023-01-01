@@ -1,47 +1,48 @@
 @use 'colors'
 @use 'var'
 
-$gap: 40px
+$row-gap: 40px
 .solution
-    gap: 40px
+    gap: $row-gap
 
 .solution-text
-    margin-top: $gap
+    margin-top: $row-gap
 
 .solution-button
-    margin-bottom: $gap
+    margin-bottom: $row-gap
 
-$gap: 5px
+$element-gap: min(7px, 1.25vw)
 .scroll
     max-width: 80vw
     display: flex
     overflow-x: scroll
     border: 1px solid white
-    padding: $gap
-    gap: $gap
+    padding: $element-gap
+    gap: $element-gap
 
-$width: 210px
+$width: min(210px, 40vw) 
 .element
     width: $width
     aspect-ratio: 21 / 25
+    font-size: $width
     display: grid
     grid-template-rows: 20% 45% 1fr 1fr
     place-items: center
-    padding: 5px 0
+    // padding: 5px 0
     flex-shrink: 0 // Does not shrink element's width
     & > span:first-child // Atomic Number
-       font-size: 25px
+        font-size: 12.5%
     & > span:nth-child(2) // Symbol
-        font-size: 90px
+        font-size: 40%
     & > span:nth-child(n + 3) // Name and Group
-        font-size: 18px
+        font-size: 8.5%
 
 .space
     width: $width
 
 @mixin gradient($light, $dark, $border)
     background: linear-gradient(to right bottom, $light, $dark 80%)
-    border: 3px solid $border
+    border: min(3px, 0.7vw) solid $border
 
 .alkali-metal
     @include gradient(colors.$alkali-metal-light-color, colors.$alkali-metal-dark-color, colors.$alkali-metal-border-color)
