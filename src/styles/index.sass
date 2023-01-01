@@ -24,8 +24,8 @@ button
     user-select: none // Do not highlight button text
     background: linear-gradient(to right bottom, colors.$elementify-button-light-color, colors.$elementify-button-dark-color)
     font-size: var.$font-size
-    padding: 30px
-    border-radius: 30px
+    padding: min(25px, 4.5vw)
+    border-radius: min(25px, 4vw)
     &:hover
         background: linear-gradient(to right bottom, colors.$elementify-hover-light-color, colors.$elementify-hover-dark-color)
 
@@ -33,6 +33,5 @@ button
     display: flex
     flex-direction: column
     align-items: center
-    gap: var.$gap
     & > span // First text displayed on screen
         font-size: var.$font-size

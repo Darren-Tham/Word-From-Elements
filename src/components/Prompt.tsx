@@ -78,7 +78,7 @@ export default function Prompt({
 
     return (
         <div
-            className='wrapper'
+            className='wrapper prompt'
         >
             <span
                 style={styles[0]}

@@ -147,7 +147,7 @@ export default function Solution({
     const text = solutions.length === 0 ? "No Solution" : `${solutions.length} ${solutions.length === 1 ?  "Solution" : "Solutions"}`
     return (
         <div
-            className='wrapper'
+            className='wrapper solution'
         >
             <span
                 className='solution-text'
