@@ -6,7 +6,6 @@ import Scene from '../enum/Scene'
 
 // Helper
 import timeout from '../helper/timeout'
-import foo from '../helper/foo'
 
 // Style
 import { APPEAR_ANIMATION_DURATION, APPEAR_ANIMATION_DELAY, getAppearStyle, getDisappearStyles, resetStyles } from '../styles/AnimationStyle'
